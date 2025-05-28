@@ -1,0 +1,32 @@
+#!/bin/sh
+LOGB=/var/log/backup/mysql
+LOGYEAR=$(date +%Y)
+LOGMONTH=$(date +%m)
+LOGDIR=$LOGB/$LOGYEAR/$LOGMONTH
+LOGDY=$LOGB/$LOGYEAR
+if [ ! -d $LOGDY ] ; then
+  mkdir $LOGDY
+fi
+if [ ! -d $LOGDIR ] ; then
+  mkdir $LOGDIR 
+fi
+LOGDATE=$(date +%Y%m%d%H%M%S)
+
+BACKUPDIR=/backup
+DBNAME="example"
+DATE=$(date +%Y%m%d)
+MON=$(date +%Y%m)
+BD=$BACKUPDIR/$MON
+
+if [ -e $BD ] ; then
+ cd $BD;
+ else 
+ mkdir -p $BD
+ cd $BD;
+fi
+
+
+# echo $DATE
+
+D=/usr/local/bin/mysqldump
+$D -u root $DBNAME  >$DATE.sql 2>$LOGDIR/$LOGDATE.log
